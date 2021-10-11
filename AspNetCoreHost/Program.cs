@@ -38,4 +38,27 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+
+
+
+app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/BlazorApp1"), app1 => 
+{
+    app1.UseBlazorFrameworkFiles("/BlazorApp1");
+    app1.UseEndpoints(endpoints =>
+    {
+        endpoints.MapFallbackToFile("/BlazorApp1/{*path:nonfile}",
+            "BlazorApp1/index.html");
+    });
+});
+
+app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/BlazorApp2"), app2 =>
+{
+    app2.UseBlazorFrameworkFiles("/BlazorApp2");
+    app2.UseEndpoints(endpoints =>
+    {
+        endpoints.MapFallbackToFile("/BlazorApp2/{*path:nonfile}",
+            "BlazorApp2/index.html");
+    });
+});
+
 app.Run();
